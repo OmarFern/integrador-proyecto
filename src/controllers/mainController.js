@@ -47,34 +47,27 @@ const mainController = {
 			include: [{
 				model: db.SubCategoria,
 				as: 'subcategoria',
-				where: {
-					    nombre: req.params.nombreCategoria}}]})
+				where: { nombre: req.params.nombreCategoria}}]})
 		.then(lista_productos => {
 			
 		res.render('productosBuscadosPorSubcategoria', {
 
-				lista_productos,
-				session: session})})
+				lista_productos,session: session})})
 		.catch(error => console.log(error))},
 	productoPorMarca: (req, res) => {
 		const session = req.session.usuario;
 
 		db.Producto.findAll({
-			where: {
-				deleted: 0
-			},
+			where: {deleted: 0},
 			include: [{
 				model: db.Marca,
 				as: 'marca',
-				where: {
-					nombre: req.params.nombreMarca}}]})
+				where: {nombre: req.params.nombreMarca}}]})
 		.then(lista_productos => {
 			/* console.log('PRODUCTOS POR MARCAS')
 			console.log(lista_productos) */
 		res.render('productosBuscadosPorMarca', {
-
-				lista_productos,
-				session: session})})
+				lista_productos,session: session})})
 		.catch(error => res.send(error))}}
 
 module.exports = mainController;

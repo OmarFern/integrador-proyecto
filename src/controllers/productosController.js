@@ -78,10 +78,7 @@ const productoController = {
     agregar: (req, res) => {
         let promiseCategoria = db.Categoria.findAll();
         let promiseSubCategoria = db.SubCategoria.findAll({
-            include: [{
-                association: 'categoria'
-            }]
-        });
+            include: [{ association: 'categoria'}] });
         let promiseMarca = db.Marca.findAll();
         Promise.all([promiseCategoria, promiseSubCategoria, promiseMarca])
             .then(([categorias, sub_categorias, marcas]) => {
@@ -95,8 +92,7 @@ const productoController = {
     guardar: (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
-          return res.render("agregar", {
-            errors: errors.errors,});}
+          return res.render("agregar", { errors: errors.errors,});}
         else{
             db.Producto.create({
                 nombre: req.body.nombre,
@@ -125,7 +121,7 @@ const productoController = {
         let promiseMarca = db.Marca.findAll();
         let promiseProducto = db.Producto.findByPk(req.params.id)
         Promise.all([promiseCategoria, promiseSubCategoria, promiseMarca, promiseProducto])
-            .then(([categorias, sub_categorias, marcas, producto]) => {
+               .then(([categorias, sub_categorias, marcas, producto]) => {
                 res.render('editar', {
                     categorias,
                     sub_categorias,
@@ -134,9 +130,8 @@ const productoController = {
                     session: session
                 })
                 console.log('DATOS PRODUCTOS ANTES DE EDITAR')
-                console.log(producto)
-            })
-            .catch(error => res.send(error))
+                console.log(producto) })
+               .catch(error => res.send(error))
 
 
     },
@@ -160,14 +155,9 @@ const productoController = {
 
 
     eliminar: (req, res) => {
-        db.Producto.update({
-            deleted: 1
-        }, {
-            where: {
-                id: req.params.id
-            }
-        })
-        res.redirect('/productos')},
+        db.Producto.update({ deleted: 1}, {
+            where: { id: req.params.id }})
+            res.redirect('/productos')},
 
 
     agregarAlCarrito: (req, res) => { },

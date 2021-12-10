@@ -126,13 +126,9 @@ const usuariosController = {
       imagen: req.file ? req.file.filename : session.imagen,
       password: session.password
     }, {
-      where: {
-        id: session.id
-      }
-    }).then(() => {
-      req.session.destroy();
-      res.redirect("/");
-    }).catch((error) => res.send(error));
+      where: { id: session.id} })
+    .then(() => { req.session.destroy(); res.redirect("/");})
+    .catch((error) => res.send(error));
 
     // }
     /*   }) */
@@ -142,19 +138,17 @@ const usuariosController = {
       let session = req.session.usuario;
       db.Usuario.findAll({where: { deleted: 0, },})
       .then((usuarios) => {
-        res.render("log", {
+      res.render("log", {
           usuarios: usuarios,
           session: session,});});},
   recuperarForm: (req, res) => {res.render("recuperar");},
-  recuperar: (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      res.render("recuperarForm", {errors: errors.errors });} 
-      else {
-      db.Usuario.update({
-        password: req.body.passwordEditado ? bcrypt.hashSync(req.body.passwordRecuperado, 10) : null
-      }, { where: { email: req.body.passwordEditado ? req.body.emailRecuperado : null }})
-      .then((edit) => {
+
+  recuperar: (req, res) => {const errors = validationResult(req);
+    if (!errors.isEmpty()) {res.render("recuperarForm", {errors: errors.errors });} 
+    else {db.Usuario.update({
+        password: req.body.passwordEditado ? bcrypt.hashSync(req.body.passwordRecuperado, 10) : null},
+       { where: { email: req.body.passwordEditado ? req.body.emailRecuperado : null }})
+       .then((edit) => {
         req.session.destroy();
         res.redirect("/");}); }},};
 

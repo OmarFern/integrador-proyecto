@@ -14,14 +14,11 @@ const adminMiddleware = require('../middlewares/adminMiddleware');
 const uploadProducts = require('../middlewares/multerProducts')
 
 const storageUser = multer.diskStorage({ 
-   destination: function (req, file, cb) {
-      cb(null, './public/img/');
-   },
+   destination: function (req, file, cb) {cb(null, './public/img/');},
+   
    filename: function (req, file, cb) {
       cb(null, `${Date.now()}_img_${path.extname(file.originalname)}`);
-      cb(null, file.originalname)
-   }
-})
+      cb(null, file.originalname) }})
 
 
 
@@ -30,13 +27,11 @@ const uploadUsers = multer({storage: storageUser});
 
 //EXPRESS VALIDATOR
 let dataCheckRegister = [
-   body('nombre').notEmpty().withMessage('Debes completar el campo de nombre').bail().isLength({
-      min: 2
-   }).withMessage('El nombre debe tener más de 2 carácteres'),
+   body('nombre').notEmpty().withMessage('Debes completar el campo de nombre').bail()
+   .isLength({ min: 2}).withMessage('El nombre debe tener más de 2 carácteres'),
 
-   body('apellido').notEmpty().withMessage('Debes completar el campo de apellido').bail().isLength({
-      min: 2
-   }).withMessage('El nombre debe tener más de 2 carácteres'),
+   body('apellido').notEmpty().withMessage('Debes completar el campo de apellido').bail()
+   .isLength({ min: 2}).withMessage('El nombre debe tener más de 2 carácteres'),
 
    body('usuario').notEmpty().withMessage('Debes completar el campo de usuario').bail(),
 
@@ -48,55 +43,44 @@ let dataCheckRegister = [
   /*  file('imagen').notEmpty().withMessage('Debes completar el campo de foto de perfil'), */
 
    body('password').notEmpty().withMessage('Debes completar el campo de contraseña').bail()
-   .isLength({
-      min: 8
-   }).withMessage('La contraseña debe ser o tener más de 8 carácteres').bail()
+   .isLength({ min: 8}).withMessage('La contraseña debe ser o tener más de 8 carácteres').bail()
    .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d@$.!%*#?&]/).withMessage('La contraseña debe tener al menos un carácter especial, una letra mayúscula y una letra minúscula')
 
 ];
 let dataCheckLogin = [
    body('email').notEmpty().withMessage('Debes completar el campo de email').bail()
    .isEmail().withMessage('Debes completar el campo con un email válido'),
+
    body('password').notEmpty().withMessage('Debes completar el campo de contraseña')
 ]
 let dataCheckAgregarProducto = [
    body('nombre').notEmpty().withMessage('Debes completar el campo de nombre').bail()
-   .isLength({
-      min: 5
-   }).withMessage('El nombre del producto deberá tener al menos 5 caracteres'),
-   body('descripcion').isLength({
-      min: 20
-   }).withMessage('La descripción del producto debe tener al menos 20 caracteres.'),
+   .isLength({ min: 5 }).withMessage('El nombre del producto deberá tener al menos 5 caracteres'),
+
+   body('descripcion').isLength({ min: 20})
+   .withMessage('La descripción del producto debe tener al menos 20 caracteres.'),
+
    body('categoria').notEmpty().withMessage('Debes elegir el campo de categoría'),
+
    body('sub_categoria').notEmpty().withMessage('Debes elegir el campo de categoría'),
 ]
 let dataCheckEditarUsuario = [
-   body('nombreEditado').isLength({
-      min: 2
-   }).withMessage('El nombre debe tener más de 2 carácteres'),
+   body('nombreEditado').isLength({ min: 2}).withMessage('El nombre debe tener más de 2 carácteres'),
 
-   body('apellidoEditado').isLength({
-      min: 2
-   }).withMessage('El nombre debe tener más de 2 carácteres'),
+   body('apellidoEditado').isLength({ min: 2}).withMessage('El nombre debe tener más de 2 carácteres'),
 
    body('emailEditado').isEmail().withMessage('Debes completar el campo con un email válido')
 ]
 
 let dataCheckEditarProducto = [
    body('nombre').notEmpty().withMessage('Debes completar el campo de nombre').bail()
-   .isLength({
-      min: 5
-   }).withMessage('El nombre del producto deberá tener al menos 5 caracteres'),
-   body('descripcion').isLength({
-      min: 20
-   }).withMessage('La descripción del producto debe tener al menos 20 caracteres.')
+   .isLength({min: 5}).withMessage('El nombre del producto deberá tener al menos 5 caracteres'),
+   body('descripcion').isLength({min: 20}).withMessage('La descripción del producto debe tener al menos 20 caracteres.')
 ]
 
 let validPassword = [
    body('passwordEditado').notEmpty().withMessage('Debes completar el campo de contraseña').bail()
-   .isLength({
-      min: 8
-   }).withMessage('La contraseña debe ser o tener más de 8 carácteres').bail()
+   .isLength({min: 8}).withMessage('La contraseña debe ser o tener más de 8 carácteres').bail()
    .matches(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d@$.!%*#?&]/).withMessage('La contraseña debe tener al menos un carácter especial, una letra mayúscula y una letra minúscula')
 ]
 
