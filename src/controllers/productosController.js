@@ -7,33 +7,19 @@ const {
   
 //DATABASE
 const db = require('../database/models');
-const {
-    Op
-} = require("sequelize");
+const {Op} = require("sequelize");
 
 
 const productoController = {
     buscar: (req, res) => {
-        const session = req.session.usuario;
-        db.Producto.findAll({
+            const session = req.session.usuario;
+            db.Producto.findAll({
 
-                    where: {
-
-                        nombre: {
-                            [Op.like]: `%${req.body.productoBuscado}%`
-                        }
-                    }
-                }
-
-
-            )
+                    where: {nombre: {[Op.like]: `%${req.body.productoBuscado}%`}} })
             .then(lista_productos => {
                 res.render('productosBuscados', {
                     lista_productos,
-                    session: session
-                })
-            })
-    },
+                    session: session})}) },
     lista: (req, res) => {
 
         const session = req.session.usuario;
@@ -43,83 +29,51 @@ const productoController = {
         db.Producto.findAll({
             where: {
                 deleted: 0,
-                fkCategoria: {
-                    [Op.lte]: 6
-                }
-            }
-        }).then(lista_productos => {
+                fkCategoria: { [Op.lte]: 6} }})
+        .then(lista_productos => {
             res.render('productos', {
                 "lista_productos": lista_productos,
-                session: session
-            });
-        })
-
-    },
+                session: session});})},
     detalleProducto: (req, res) => {
         const session = req.session.usuario;
         db.Producto.findByPk(req.params.id, {
             include: [{
                     model: db.Marca,
-                    as: 'marca',
-                },
+                    as: 'marca', },
                 {
                     model: db.SubCategoria,
                     as: 'subcategoria',
-                },
-                {
+                }, {
                     model: db.Categoria,
                     as: 'categoria',
-                },
-
-            ]
-        }).then(producto => {
+                },]})
+        .then(producto => {
             if(producto != undefined){
                 res.render('detalleProducto', {
                     "producto": producto,
-                    session: session
-                });
-            }else{
-                res.render('productNotExist');
-            }
-        })
-
-
-    },
+                    session: session}); }
+            else{
+                res.render('productNotExist');}})},
     cart: (req, res) => {
         let session = req.session.usuario;
         db.Carrito.findAll({
-            where: {
-                id: session.id
-            },
+            where: {id: session.id },
             include: [{
-                    model: db.Usuario,
-                    as: 'usuario',
-                },
-                {
-                    model: db.Producto,
-                    as: 'producto',
-                }
-            ]
-        }).then(productosCarrito => {
+                model: db.Usuario,
+                    as: 'usuario',},
+                {model: db.Producto,
+                    as: 'producto',}]})
+        .then(productosCarrito => {
             /*   console.log('PRODUCTOS AL CARRITO') */
             for (let i = 0; i < productosCarrito.length; i++) {
 
                 /*    console.log(productosCarrito[i].producto[i].nombre) */
-
-
             }
 
             res.render('cart', {
                 productosCarrito,
-                session: session
-            })
-        })
-
-    },
-    eliminarCart: (req, res) => {
-
-
-    },
+                session: session})})},
+    eliminarCart: (req, res) => { },
 
     agregar: (req, res) => {
         let promiseCategoria = db.Categoria.findAll();
@@ -137,16 +91,13 @@ const productoController = {
                     marcas
                 })
             })
-            .catch(error => res.send(error))
-
-    },
+            .catch(error => res.send(error))},
     guardar: (req, res) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
           return res.render("agregar", {
-            errors: errors.errors,
-          });
-        }else{
+            errors: errors.errors,});}
+        else{
             db.Producto.create({
                 nombre: req.body.nombre,
                 precio: req.body.precio,
@@ -161,9 +112,7 @@ const productoController = {
             }).then(() => {
                 return res.redirect('/productos');
             })
-            .catch(error => res.send(error));
-        }
-    },
+            .catch(error => res.send(error)); }},
 
     editar: (req, res) => {
         const session = req.session.usuario;
@@ -205,12 +154,9 @@ const productoController = {
                 enOferta: req.body.oferta ? req.body.oferta = 1 : req.body.oferta = 0,
             },{where: {id: req.params.id}})
         })
-        .then(res.redirect("/productos"))
-    },
+        .then(res.redirect("/productos"))},
 
-    filtrar: (req, res) => {
-
-    },
+    filtrar: (req, res) => { },
 
 
     eliminar: (req, res) => {
@@ -221,13 +167,10 @@ const productoController = {
                 id: req.params.id
             }
         })
-        res.redirect('/productos');
-    },
+        res.redirect('/productos')},
 
 
-    agregarAlCarrito: (req, res) => {
-
-    },
+    agregarAlCarrito: (req, res) => { },
 
 }
 
