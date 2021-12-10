@@ -2,13 +2,9 @@ const fs = require("fs");
 const path = require("path");
 const bcrypt = require("bcryptjs");
 
-const {
-  Op
-} = require("sequelize");
+const {Op} = require("sequelize");
 
-const {
-  validationResult
-} = require("express-validator");
+const {validationResult} = require("express-validator");
 
 const db = require("../database/models");
 
@@ -16,15 +12,9 @@ const db = require("../database/models");
 
 
 const usuariosController = {
-  noSession: (req, res) => {
-    res.render("noSession");
-  },
-  noAdmin: (req, res) => {
-    res.render("noAdmin");
-  },
-  formRegister: (req, res) => {
-    res.render("register");
-  },
+  noSession: (req, res) => {res.render("noSession");},
+  noAdmin: (req, res) => {res.render("noAdmin");},
+  formRegister: (req, res) => {res.render("register");},
   registrarse: (req, res) => {
     /* const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -34,9 +24,8 @@ const usuariosController = {
     } else { */
       db.Usuario.findAll({
         where: {
-          deleted: 0
-        }
-      }).then(usuarios => {
+          deleted: 0}})
+        .then(usuarios => {
       /*   if (req.body.email == usuarios.email) {
           let exist = 'Email ya registrado'
           console.log('Email ya registrado')
@@ -45,7 +34,7 @@ const usuariosController = {
           });
           
         } else { */
-          db.Usuario.create({
+     db.Usuario.create({
               nombre: req.body.nombre,
               apellido: req.body.apellido,
               usuario: req.body.usuario,
@@ -53,111 +42,64 @@ const usuariosController = {
               password: bcrypt.hashSync(req.body.password, 10),
               domicilio: req.body.domicilio,
               imagen: req.file ? req.file.filename : '',
-              fkRol: 2,
-            })
-            .then(() => {
-              return res.redirect("/");
-            })
+              fkRol: 2,})
+            .then(() => {return res.redirect("/");})
             .catch((error) => res.send(error));
        /*  } */
-      })
+})
 
    /*  } */
   },
-  formLogin: (req, res) => {
-    res.render("login");
-  },
+  formLogin: (req, res) => {res.render("login");},
+  
   inciarSesion: (req, res) => {
     const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-
-      res.render("login", {
-        errors: errors.errors
-      });
-
-    } else {
-
-      db.Usuario.findOne({
-        where: {
+    if (!errors.isEmpty()) { res.render("login", {errors: errors.errors});} 
+    else {db.Usuario.findOne({
+          where: {
           email: req.body.email,
-          deleted: 0,
-        }
-      }).then((usuario) => {
+          deleted: 0, }})
+          .then((usuario) => {
 
         if (usuario != undefined) {
-          if (bcrypt.compareSync(req.body.password, usuario.password)) {
-            req.session.usuario = usuario;
-
-            let session = req.session.usuario;
-
-            let cookieEmail = usuario.email;
-
+           if (bcrypt.compareSync(req.body.password, usuario.password)) {
+             req.session.usuario = usuario;
+             let session = req.session.usuario;
+             let cookieEmail = usuario.email;
             if (req.body.recordar == "on") {
-              res.cookie("cookieSession", cookieEmail, {
-                maxAge: 1000000,
-              });
-            }
-
-            res.redirect("/");
-
-
-          } 
-        } else {
-          let notExist = 'El email y/o la contraseña son incorrectos'
-          res.render('login', {
-            notExist
-          });
-        }
-      }).catch((error) => res.send(error));
-    }
-  },
+              res.cookie("cookieSession", cookieEmail, {maxAge: 1000000,});}
+              res.redirect("/"); }  } 
+            else {
+                let notExist = 'El email y/o la contraseña son incorrectos'
+                res.render('login', { notExist });}})
+                .catch((error) => res.send(error));}},
   logout: (req, res) => {
-    req.session.destroy();
-    res.cookie("cookieSession", null, {
-      maxAge: 1,
-    });
-    res.redirect("/");
-  },
+      req.session.destroy();
+      res.cookie("cookieSession", null, { maxAge: 1,});
+      res.redirect("/");},
   eliminarCuenta: (req, res) => {
-    let session = req.session.usuario;
-    /*  console.log(session); */
-    db.Usuario.update({
-      deleted: 1,
-    }, {
-      where: {
-        id: session.id,
-      },
-    }).then(res.redirect("/"));
-    req.session.destroy();
-  },
+      let session = req.session.usuario;
+      /*  console.log(session); */
+      db.Usuario.update({
+        deleted: 1,}, 
+        { where: {id: session.id,},}).then(res.redirect("/"));
+          req.session.destroy();},
   perfil: (req, res) => {
-    let session = req.session.usuario;
-    /*  console.log("SESSION PERFIL");
-     console.log(session); */
-    res.render("perfil", {
-      session: session
-    });
-  },
-  editar: (req, res) => {
-    const session = req.session.usuario;
+      let session = req.session.usuario;
+      /*  console.log("SESSION PERFIL");
+      console.log(session); */
+      res.render("perfil", {
+        session: session});},
+  editar: (req, res) => {const session = req.session.usuario;
     /* console.log("ID SESSION EDITAR");
     console.log(session.id); */
 
-    res.render("editarUsuario", {
-      session: session
-    });
-
-
-
-  },
+    res.render("editarUsuario", {session: session});},
   actualizar: (req, res) => {
-    const session = req.session.usuario;
-
-
-    console.log('REQ SESSION ID')
-    console.log(session)
-
-    console.log(session.id)
+      const session = req.session.usuario;
+      console.log('REQ SESSION ID')
+      console.log(session)
+      console.log(session.id)
 
     /*  db.Usuario.findAll({
        where: {
@@ -197,43 +139,23 @@ const usuariosController = {
 
   },
   logs: (req, res) => {
-    let session = req.session.usuario;
-    db.Usuario.findAll({
-      where: {
-        deleted: 0,
-      },
-    }).then((usuarios) => {
-      res.render("log", {
-        usuarios: usuarios,
-        session: session,
-      });
-    });
-  },
-  recuperarForm: (req, res) => {
-    res.render("recuperar");
-  },
+      let session = req.session.usuario;
+      db.Usuario.findAll({where: { deleted: 0, },})
+      .then((usuarios) => {
+        res.render("log", {
+          usuarios: usuarios,
+          session: session,});});},
+  recuperarForm: (req, res) => {res.render("recuperar");},
   recuperar: (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-
-      res.render("recuperarForm", {
-        errors: errors.errors
-      });
-
-    } else {
+      res.render("recuperarForm", {errors: errors.errors });} 
+      else {
       db.Usuario.update({
         password: req.body.passwordEditado ? bcrypt.hashSync(req.body.passwordRecuperado, 10) : null
-      }, {
-        where: {
-          email: req.body.passwordEditado ? req.body.emailRecuperado : null
-        }
-      }).then((edit) => {
+      }, { where: { email: req.body.passwordEditado ? req.body.emailRecuperado : null }})
+      .then((edit) => {
         req.session.destroy();
-        res.redirect("/");
-      });
-    }
-
-  },
-};
+        res.redirect("/");}); }},};
 
 module.exports = usuariosController;
