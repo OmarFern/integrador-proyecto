@@ -23,8 +23,7 @@ const usuariosController = {
       });
     } else { */
       db.Usuario.findAll({
-        where: {
-          deleted: 0}})
+        where: { deleted: 0}})
         .then(usuarios => {
       /*   if (req.body.email == usuarios.email) {
           let exist = 'Email ya registrado'
@@ -56,9 +55,7 @@ const usuariosController = {
     const errors = validationResult(req);
     if (!errors.isEmpty()) { res.render("login", {errors: errors.errors});} 
     else {db.Usuario.findOne({
-          where: {
-          email: req.body.email,
-          deleted: 0, }})
+          where: { email: req.body.email, deleted: 0, }})
           .then((usuario) => {
 
         if (usuario != undefined) {
@@ -88,8 +85,7 @@ const usuariosController = {
       let session = req.session.usuario;
       /*  console.log("SESSION PERFIL");
       console.log(session); */
-      res.render("perfil", {
-        session: session});},
+      res.render("perfil", { session: session});},
   editar: (req, res) => {const session = req.session.usuario;
     /* console.log("ID SESSION EDITAR");
     console.log(session.id); */

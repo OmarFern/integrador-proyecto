@@ -10,9 +10,7 @@ module.exports = (sequelize, dataTypes) => {
         nombre: {type: dataTypes.STRING(50) },
         fkCategoria: {
             type: dataTypes.INTEGER,
-            references: {
-                model: Categoria,
-                key: 'id',}}};
+            references: { model: Categoria, key: 'id',}}};
     let config = {
         tableName: 'subCategorias',
         timestamps: false };

@@ -1,9 +1,7 @@
 const session = require('express-session');
 const fs = require('fs');
 const path = require('path');
-const {
-    validationResult
-  } = require("express-validator");
+const { validationResult} = require("express-validator");
   
 //DATABASE
 const db = require('../database/models');
@@ -11,18 +9,14 @@ const {Op} = require("sequelize");
 
 
 const productoController = {
-    buscar: (req, res) => {
-            const session = req.session.usuario;
-            db.Producto.findAll({
 
-                    where: {nombre: {[Op.like]: `%${req.body.productoBuscado}%`}} })
+    buscar: (req, res) => {  const session = req.session.usuario;
+            db.Producto.findAll({ where: {nombre: {[Op.like]: `%${req.body.productoBuscado}%`}} })
             .then(lista_productos => {
                 res.render('productosBuscados', {
                     lista_productos,
                     session: session})}) },
-    lista: (req, res) => {
-
-        const session = req.session.usuario;
+    lista: (req, res) => { const session = req.session.usuario;
         /* console.log('SESSION PRODUCTOS');
         console.log(session); */
 
@@ -31,38 +25,26 @@ const productoController = {
                 deleted: 0,
                 fkCategoria: { [Op.lte]: 6} }})
         .then(lista_productos => {
-            res.render('productos', {
-                "lista_productos": lista_productos,
-                session: session});})},
+            res.render('productos', { "lista_productos": lista_productos, session: session});})},
     detalleProducto: (req, res) => {
         const session = req.session.usuario;
         db.Producto.findByPk(req.params.id, {
-            include: [{
-                    model: db.Marca,
-                    as: 'marca', },
-                {
-                    model: db.SubCategoria,
-                    as: 'subcategoria',
-                }, {
-                    model: db.Categoria,
-                    as: 'categoria',
-                },]})
+            include: [
+                {model: db.Marca, as: 'marca', },
+                { model: db.SubCategoria, as: 'subcategoria',},
+                { model: db.Categoria, as: 'categoria',},]})
         .then(producto => {
             if(producto != undefined){
-                res.render('detalleProducto', {
-                    "producto": producto,
-                    session: session}); }
+                res.render('detalleProducto', {"producto": producto, session: session}); }
             else{
                 res.render('productNotExist');}})},
     cart: (req, res) => {
         let session = req.session.usuario;
         db.Carrito.findAll({
             where: {id: session.id },
-            include: [{
-                model: db.Usuario,
-                    as: 'usuario',},
-                {model: db.Producto,
-                    as: 'producto',}]})
+            include: [
+                { model: db.Usuario, as: 'usuario',},
+                { model: db.Producto, as: 'producto',}]})
         .then(productosCarrito => {
             /*   console.log('PRODUCTOS AL CARRITO') */
             for (let i = 0; i < productosCarrito.length; i++) {
@@ -82,17 +64,11 @@ const productoController = {
         let promiseMarca = db.Marca.findAll();
         Promise.all([promiseCategoria, promiseSubCategoria, promiseMarca])
             .then(([categorias, sub_categorias, marcas]) => {
-                res.render('agregar', {
-                    categorias,
-                    sub_categorias,
-                    marcas
-                })
-            })
+                  res.render('agregar', {categorias, sub_categorias,marcas }) })
             .catch(error => res.send(error))},
     guardar: (req, res) => {
         const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-          return res.render("agregar", { errors: errors.errors,});}
+        if (!errors.isEmpty()) {return res.render("agregar", { errors: errors.errors,});}
         else{
             db.Producto.create({
                 nombre: req.body.nombre,
