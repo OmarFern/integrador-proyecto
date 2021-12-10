@@ -3,10 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 
-const {
-   body,
-   check
-} = require('express-validator');
+const {body,check} = require('express-validator');
 
 const loggedMiddleware = require('../middlewares/loggedMiddleware')
 const notLoggedMiddleware = require('../middlewares/notLoggedMiddleware')
