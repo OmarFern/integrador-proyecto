@@ -26,6 +26,7 @@ const mainController = {
 					marcas: marcas,
 					session: session})})
 			    .catch(error => res.send(error))},
+
 	productoPorCategoria: (req, res) => {
 		const session = req.session.usuario;
 
@@ -66,8 +67,7 @@ const mainController = {
 		.then(lista_productos => {
 			/* console.log('PRODUCTOS POR MARCAS')
 			console.log(lista_productos) */
-		res.render('productosBuscadosPorMarca', {
-				lista_productos,session: session})})
+		res.render('productosBuscadosPorMarca', {lista_productos,session: session})})
 		.catch(error => res.send(error))}}
 
 module.exports = mainController;
