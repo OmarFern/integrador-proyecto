@@ -16,7 +16,8 @@
       <section class="containerProductos">
          <% for(let i=0;  i<lista_productos.length;i++ ) {%>
          <div class="producto">
-            <a href="/detalleProducto/<%=lista_productos[i].id%>"><img src="img/products/<%=lista_productos[i].imagen%>"
+            <a href="/detalleProducto/<%=lista_productos[i].id%>">
+               <img src="img/products/<%=lista_productos[i].imagen%>"
                   class="producto__img"></a>
             <div class="productDescription">
                <h3 class="producto__title"> <%= lista_productos[i].nombre %> </h3>
