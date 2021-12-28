@@ -16,6 +16,7 @@
   
   <main>
  
+ 
     <div class="perfilContainer">
 
       <%  if(locals.errors){ %>
@@ -48,6 +49,7 @@
             <option value="<%= categorias[i].id %>"><%=  categorias[i].nombre  %></option>
             <% } %>
           </select>
+        
     
           <br>
           <label> Sub Categoría <label style="color: #ab191f;">*</label> </label>
@@ -83,6 +85,7 @@
     </div>
   </main>
 
+  <!-- <script src="/js/agregarValidation.js"> </script> -->
   <script>
     let agregar = document.getElementById('agregar')
     let form = document.getElementById('agregarForm')
