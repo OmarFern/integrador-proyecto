@@ -1,4 +1,4 @@
-<scrip>
+// va dentro de <script></script>
     let agregar = document.getElementById('agregar')
     let form = document.getElementById('agregarForm')
     let inputs = document.querySelectorAll('input')
@@ -58,4 +58,4 @@
      
 
     }
-    </scrip>
+  

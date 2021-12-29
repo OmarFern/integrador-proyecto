@@ -16,23 +16,11 @@ const usuariosController = {
   noAdmin: (req, res) => {res.render("noAdmin");},
   formRegister: (req, res) => {res.render("register");},
   registrarse: (req, res) => {
-    /* const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.render("register", {
-        errors: errors.errors,
-      });
-    } else { */
+  
       db.Usuario.findAll({
         where: { deleted: 0}})
         .then(usuarios => {
-      /*   if (req.body.email == usuarios.email) {
-          let exist = 'Email ya registrado'
-          console.log('Email ya registrado')
-           res.render("register", {
-            exist
-          });
-          
-        } else { */
+  
      db.Usuario.create({
               nombre: req.body.nombre,
               apellido: req.body.apellido,
@@ -44,10 +32,10 @@ const usuariosController = {
               fkRol: 2,})
             .then(() => {return res.redirect("/");})
             .catch((error) => res.send(error));
-       /*  } */
+
 })
 
-   /*  } */
+
   },
   formLogin: (req, res) => {res.render("login");},
   
