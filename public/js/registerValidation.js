@@ -5,7 +5,7 @@ window.addEventListener("load",function(){
 let formulario=document.querySelector("form.datosRegisterForm");
      formulario.addEventListener("submit", function(e){
      //e.preventDefault()
- 
+let regexPass = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[a-zA-Z\d@$.!%*#?&]/;
 let errores=[] 
 //--------nombre-----------------
 let campoNombre=document.querySelector("input.name")
@@ -46,19 +46,23 @@ let campoFoto=document.querySelector("input.foto")
 if(campoFoto.value==""){
     errores.push("Cargar una Imagen")}
 else if(campoFoto.length<2){errores.push("Deberá tener al menos 2 caracteres")} 
-else if (!(/\.(jpg|png|gif)$/i).test(campoFoto.value)) {
+else if (!(/\.(jpg|jpeg|png|gif)$/i).test(campoFoto.value)) {
     errores.push('El archivo a adjuntar no es una imagen');}
             
 //--------contraseña--------------     
 let campoPassword=document.querySelector("input.password")
 if(campoPassword.value==""){errores.push("El Password Tiene Que Estar Completo")}
 else if(campoPassword.value.length<=8){errores.push("Deberá tener al menos 8 caracteres la Contraseña")} 
+else if(regexPass.test(campoPassword.value) == false){
+    errores.push("Deberá tener mayuscula , minuscula,caracter especial")}
 //--------contraseña confirmacion--------------     
 let campoPassword2=document.querySelector("input.password2")
 if(campoPassword2.value==""){
      errores.push("Falta la confirmacion Password ")}
 else if(campoPassword2.value.length<=8){
      errores.push("Deberá tener al menos 8 caracteres la Contraseña")}  
+else if(regexPass.test(campoPassword2.value) == false){
+    errores.push("Deberá tener mayuscula , minuscula,caracter especial")}     
 //----------verifico contaseñas---------------
 if(campoPassword.value!==campoPassword2.value){
     errores.push("Contraseña no coinciden")}   
