@@ -40,7 +40,8 @@ let dataCheckRegister = [
 
    body('domicilio').notEmpty().withMessage('Debes completar el campo de domicilio'),
 
-  /*  file('imagen').notEmpty().withMessage('Debes completar el campo de foto de perfil'), */
+   body('imagen').notEmpty().withMessage('Debes completar el campo de foto de perfil').bail()
+  .matches(/\.(jpg|jpeg|png|gif)$/i).withMessage('Debe tener extencion gif|jpg|jpeg|png)') ,
 
    body('password').notEmpty().withMessage('Debes completar el campo de contraseña').bail()
    .isLength({ min: 8}).withMessage('La contraseña debe ser o tener más de 8 carácteres').bail()
@@ -131,7 +132,7 @@ const usuariosController = require('../controllers/usuariosController');
 
 // Registrarse
 router.get('/register', loggedMiddleware, usuariosController.formRegister);
-router.post('/log', uploadUsers.single("imagen"), usuariosController.registrarse);
+router.post('/log', uploadUsers.single("imagen"),dataCheckRegister, usuariosController.registrarse);
 
 // Iniciar Sesión
 router.get('/login', loggedMiddleware, usuariosController.formLogin);

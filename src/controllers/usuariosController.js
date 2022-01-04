@@ -15,8 +15,11 @@ const usuariosController = {
   noSession: (req, res) => {res.render("noSession");},
   noAdmin: (req, res) => {res.render("noAdmin");},
   formRegister: (req, res) => {res.render("register");},
+
   registrarse: (req, res) => {
-  
+    //let errors=validationResult(req);//datos del formulario
+    // res.send(errors)
+
       db.Usuario.findAll({
         where: { deleted: 0}})
         .then(usuarios => {
@@ -31,9 +34,8 @@ const usuariosController = {
               imagen: req.file ? req.file.filename : '',
               fkRol: 2,})
             .then(() => {return res.redirect("/");})
-            .catch((error) => res.send(error));
-
-})
+            .catch((error) => res.send(error));})
+            
 
 
   },

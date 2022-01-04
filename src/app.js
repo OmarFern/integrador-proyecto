@@ -46,8 +46,8 @@ app.set('view engine', 'ejs')
 
 
 //Port
-app.listen(process.env.PORT||4000, ()=>{
-    console.log('Esto anda http://localhost:4000')
+app.listen(process.env.PORT||4010, ()=>{
+    console.log('Esto anda http://localhost:4010')
 })
 
 //Route
